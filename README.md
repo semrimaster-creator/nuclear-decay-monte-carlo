@@ -85,6 +85,36 @@ With the default parameters, a single run typically shows the
 ensemble-mean final population within well under 1% of the analytic
 prediction — see `decay_simulation.png`.
 
+## Version 2: real isotopes, statistics, and vectorization
+
+`monte_carlo_decay_v2.py` extends the original script in three ways:
+
+1. **Real isotope presets** — Am-241 (alpha), Cs-137 (beta), Co-60 and I-131
+   (beta+gamma), each with an actual half-life and characteristic emitted
+   energy in MeV (see `ISOTOPE_PRESETS` in the code), instead of an
+   abstract, unitless half-life.
+2. **Ensemble statistics and cumulative energy** — the ensemble simulation
+   now reports the standard deviation of N(t) alongside the mean, plotted
+   as a ±1σ band, and checked numerically against the analytic result for
+   a binomial decay process: `Var[N(t)] = N0 · p(t) · (1 − p(t))`, where
+   `p(t) = e^(−λt)` is the single-nucleus survival probability. A second
+   panel plots the cumulative energy released, `E(t) = (N0 − N(t)) ×
+   (energy per decay)`.
+3. **Vectorized ensemble simulation** — the *time* loop cannot be removed
+   (N(t) depends sequentially on N(t−dt)), but the loop over independent
+   ensemble runs has been eliminated: all trajectories are advanced
+   together via a single vectorized NumPy binomial draw per time step,
+   `rng.binomial(n_current_array, p)`, rather than an outer Python loop
+   calling the single-run function `n_runs` times.
+
+Run it with, for example:
+
+```bash
+python monte_carlo_decay_v2.py --isotope cs-137
+python monte_carlo_decay_v2.py --isotope am-241 --ensemble-runs 500
+python monte_carlo_decay_v2.py --isotope none --half-life 12 --time-unit hours --decay-mode beta --energy-mev 0.8
+```
+
 ## Possible extensions (next steps)
 
 - Add a **branching decay chain** (parent → daughter → granddaughter),
