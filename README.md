@@ -125,6 +125,48 @@ python monte_carlo_decay_v2.py --isotope none --half-life 12 --time-unit hours -
 - Port the core event loop to a compiled backend (Numba/C++) to scale to
   realistic nuclide inventories, as used in production Monte Carlo burnup
   codes.
+  <!--
+  Paste this section near the top of the repository's main README.md,
+  above or in place of the current single-project description. Written
+  to be read by a PhD admissions committee in under a minute.
+-->
+
+## From radioactive decay to nuclear transport, criticality, and structure
+
+This repository began as a Monte Carlo simulation of radioactive decay
+(binomial and Gillespie/event-driven methods, validated against the
+analytic decay law). It has since been extended along the three research
+directions listed in my research profile: **nuclear transport**,
+**nuclear reactions/criticality**, and **nuclear structure**. Each
+extension reuses the same core computational pattern — sample a
+stochastic event from an exponential law governed by a physical rate,
+branch between competing outcomes, average over an ensemble of
+histories, and validate the result against an independent deterministic
+or analytic solution — applied to a different physical equation each
+time.
+
+| Module | Physics | Stochastic sampling | Deterministic validation |
+|---|---|---|---|
+| `decay_simulation.py` *(original)* | Radioactive decay | `t = -ln(1-U)/λ` | `N(t) = N0 e^{-λt}` |
+| `neutron_transport_1d.py` | 1D neutron transport | `s = -ln(1-U)/Σt` | 1-speed diffusion equation (analytic + FEM) |
+| `keff_power_iteration.py` | Criticality / k_eff | fission-neutron power iteration | k_eff < k_∞ (leakage bound); k_eff(L) monotonicity |
+| `nuclear_structure_schrodinger.py`, `woods_saxon_spin_orbit.py` | Nuclear structure | *(deterministic eigenvalue problem, not stochastic)* | square well & harmonic oscillator analytic energies; correct N=2,8,20,28 shell gaps |
+
+**Validation discipline:** every module includes an automated test suite
+(`test_physics.py`, runnable with `pytest`) enforcing these checks, and
+every module's development history includes at least one caught-and-fixed
+bug (documented in `README_project_extensions.md`) — a track-length
+estimator that initially used the wrong path-length convention, a
+tridiagonal-matrix indexing error, a ħ²/2m unit-convention mismatch, and a
+spin-orbit sign error that initially inverted the j = l ± 1/2 level
+ordering. I've kept these in the documentation deliberately: catching
+this class of error against an analytic or physical benchmark, rather
+than trusting a first working run, is the habit I most want a committee
+to see demonstrated in code.
+
+See `README_project_extensions.md` for the full technical writeup of each
+module, including the specific physics being tested and the exact
+mechanism of each bug that was caught during development.
 
 ## Author
 
