@@ -55,27 +55,41 @@ import matplotlib.pyplot as plt
 # emitted-particle (or photon) energy per decay event.
 # Sources: standard nuclear data tables (e.g. IAEA Nuclear Data Services).
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Real isotope presets.
+#   half_life:     in the unit given.
+#   q_mev:         total disintegration energy (Q-value) -- reference only.
+#   deposited_mev: energy actually deposited in matter per decay.
+#       Beta emitters: MEAN beta energy (not the endpoint!) + gamma energies
+#       weighted by branching ratios. The neutrino escapes and is EXCLUDED.
+#       Alpha emitters: no neutrino -> deposited ~ Q.
+#   Sources: NNDC / ENSDF nuclear data.
+# ---------------------------------------------------------------------------
 ISOTOPE_PRESETS = {
     "am-241": {
         "half_life": 432.2, "unit": "years",
-        "decay_mode": "alpha", "energy_mev": 5.486,
-        "note": "Am-241 -> Np-237 + alpha; smoke-detector source.",
+        "decay_mode": "alpha", "q_mev": 5.638, "deposited_mev": 5.64,
+        "note": "Am-241 -> Np-237 + alpha (5.486 MeV main branch); alpha, "
+                "recoil and the 59.5 keV gamma all deposit locally.",
     },
     "cs-137": {
         "half_life": 30.17, "unit": "years",
-        "decay_mode": "beta", "energy_mev": 0.512,
-        "note": "Cs-137 -> Ba-137m + beta- (average beta energy).",
+        "decay_mode": "beta", "q_mev": 1.176, "deposited_mev": 0.82,
+        "note": "Cs-137 -> Ba-137m + beta- (MEAN beta ~0.19 MeV; endpoint "
+                "0.514 MeV), then Ba-137m -> 661.7 keV gamma (85%). "
+                "Neutrino takes ~0.35 MeV.",
     },
     "co-60": {
         "half_life": 5.27, "unit": "years",
-        "decay_mode": "beta+gamma", "energy_mev": 1.17 + 1.33,
-        "note": "Co-60 -> Ni-60 + beta-, followed by two gamma photons "
-                "(1.17 and 1.33 MeV) -- energies summed here.",
+        "decay_mode": "beta+gamma", "q_mev": 2.824, "deposited_mev": 2.61,
+        "note": "Co-60 -> Ni-60 + beta- (mean ~0.10 MeV) + gammas "
+                "1.173 + 1.332 MeV (~100%).",
     },
     "i-131": {
         "half_life": 8.02, "unit": "days",
-        "decay_mode": "beta+gamma", "energy_mev": 0.606 + 0.364,
-        "note": "I-131 -> Xe-131 + beta- + gamma (medical isotope).",
+        "decay_mode": "beta+gamma", "q_mev": 0.971, "deposited_mev": 0.48,
+        "note": "I-131 -> Xe-131 + beta- (MEAN ~0.18 MeV; endpoint 0.606 "
+                "MeV) + 364.5 keV gamma (81.5%). Neutrino excluded.",
     },
 }
 
@@ -197,7 +211,7 @@ def resolve_physical_parameters(args) -> tuple[float, str, str, float, str]:
         half_life = preset["half_life"]
         unit = preset["unit"]
         decay_mode = preset["decay_mode"]
-        energy_mev = preset["energy_mev"]
+                energy_mev = preset["deposited_mev"]
         note = preset["note"]
     else:
         half_life = args.half_life
