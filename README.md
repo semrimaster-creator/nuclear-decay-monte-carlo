@@ -36,8 +36,12 @@ the transport equation in closed form.
 
 1. **Binomial (discrete-time) method** — at each small time step `dt`,
    every surviving nucleus independently decays with probability
-   `p = 1 - e^(-λ dt)`. Simple and intuitive, but introduces a small
-   discretization error unless `dt ≪ 1/λ`.
+   `p = 1 - e^(-λ dt)`. In fact the method is exact at the grid points: a nucleus survives one step
+with probability e^(−λ dt), so after k steps it survives with probability
+(e^(−λ dt))^k = e^(−λt), making N(t) exactly Binomial(N₀, e^(−λt)) — no
+error in the population itself. The only approximation is in event timing:
+a decay can be located only to within one step dt. The Gillespie method
+below removes even that.
 
 2. **Gillespie (exact, event-driven) method** — instead of stepping in
    fixed `dt`, the waiting time to the *next* decay event is drawn exactly
@@ -97,9 +101,10 @@ prediction — see `decay_simulation.png`.
    now reports the standard deviation of N(t) alongside the mean, plotted
    as a ±1σ band, and checked numerically against the analytic result for
    a binomial decay process: `Var[N(t)] = N0 · p(t) · (1 − p(t))`, where
-   `p(t) = e^(−λt)` is the single-nucleus survival probability. A second
-   panel plots the cumulative energy released, `E(t) = (N0 − N(t)) ×
-   (energy per decay)`.
+   `p(t) = e^(−λt)` is the single-nucleus survival probability. A second panel plots the cumulative *deposited* energy, E(t) = (N0 − N(t)) × E_dep.
+E_dep per decay uses the mean beta energy plus branching-ratio-weighted gamma
+energies, and excludes the energy carried away by the neutrino (for alpha
+emitters, E_dep ≈ the full Q-value). Data from NNDC/ENSDF.
 3. **Vectorized ensemble simulation** — the *time* loop cannot be removed
    (N(t) depends sequentially on N(t−dt)), but the loop over independent
    ensemble runs has been eliminated: all trajectories are advanced
