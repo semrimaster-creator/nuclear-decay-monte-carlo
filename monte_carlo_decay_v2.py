@@ -50,12 +50,6 @@ import matplotlib.pyplot as plt
 
 
 # ---------------------------------------------------------------------------
-# Real isotope presets: (half_life, unit, decay_mode, energy_MeV, note)
-# Half-life is stored in the unit given; energy_MeV is the characteristic
-# emitted-particle (or photon) energy per decay event.
-# Sources: standard nuclear data tables (e.g. IAEA Nuclear Data Services).
-# ---------------------------------------------------------------------------
-# ---------------------------------------------------------------------------
 # Real isotope presets.
 #   half_life:     in the unit given.
 #   q_mev:         total disintegration energy (Q-value) -- reference only.
@@ -211,7 +205,7 @@ def resolve_physical_parameters(args) -> tuple[float, str, str, float, str]:
         half_life = preset["half_life"]
         unit = preset["unit"]
         decay_mode = preset["decay_mode"]
-                energy_mev = preset["deposited_mev"]
+        energy_mev = preset["deposited_mev"]
         note = preset["note"]
     else:
         half_life = args.half_life
