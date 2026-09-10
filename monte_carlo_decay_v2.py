@@ -235,7 +235,7 @@ def main():
     parser.add_argument("--decay-mode", type=str, default="unspecified",
                         help="Manual decay mode label (used only if --isotope none)")
     parser.add_argument("--energy-mev", type=float, default=1.0,
-                        help="Manual energy per decay in MeV (used only if --isotope none)")
+                        help="help="Manual deposited energy per decay in MeV, neutrino excluded (used only if --isotope none)") in MeV (used only if --isotope none)")
     parser.add_argument("--t-max-half-lives", type=float, default=6.0,
                         help="Total simulated time, in units of half-lives (default: 6.0)")
     parser.add_argument("--dt-fraction", type=float, default=0.01,
@@ -287,7 +287,7 @@ def main():
 
     print(f"Isotope:                         {args.isotope or 'custom'}  ({note})")
     print(f"Decay mode:                      {decay_mode}")
-    print(f"Energy per decay:                {energy_mev:.3f} MeV")
+    print(f"print(f"Deposited energy per decay:      {energy_mev:.3f} MeV"):                {energy_mev:.3f} MeV")
     print(f"Half-life:                       {half_life:g} {unit}")
     print(f"Decay constant (lambda):         {decay_constant:.6g}  [1/{unit}]")
     print(f"Simulated time span:             {t_max:.3g} {unit}  "
