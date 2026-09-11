@@ -148,7 +148,7 @@ time.
 
 | Module | Physics | Stochastic sampling | Deterministic validation |
 |---|---|---|---|
-| `decay_simulation.py` *(original)* | Radioactive decay | `t = -ln(1-U)/λ` | `N(t) = N0 e^{-λt}` |
+| `monte_carlo_decay.py` *(original)* | Radioactive decay | `t = -ln(1-U)/λ` | `N(t) = N0 e^{-λt}` |
 | `neutron_transport_1d.py` | 1D neutron transport | `s = -ln(1-U)/Σt` | 1-speed diffusion equation (analytic + FEM) |
 | `keff_power_iteration.py` | Criticality / k_eff | fission-neutron power iteration | k_eff < k_∞ (leakage bound); k_eff(L) monotonicity |
 | `nuclear_structure_schrodinger.py`, `woods_saxon_spin_orbit.py` | Nuclear structure | *(deterministic eigenvalue problem, not stochastic)* | square well & harmonic oscillator analytic energies; correct N=2,8,20,28 shell gaps |
