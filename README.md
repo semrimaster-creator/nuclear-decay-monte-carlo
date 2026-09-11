@@ -94,8 +94,9 @@ prediction — see `decay_simulation.png`.
 `monte_carlo_decay_v2.py` extends the original script in three ways:
 
 1. **Real isotope presets** — Am-241 (alpha), Cs-137 (beta), Co-60 and I-131
-   (beta+gamma), each with an actual half-life and characteristic emitted
-   energy in MeV (see `ISOTOPE_PRESETS` in the code), instead of an
+   (beta+gamma), each with an actual half-life and a per-decay *deposited*
+   energy in MeV — mean beta plus branching-ratio-weighted gammas,
+   neutrino excluded (see `ISOTOPE_PRESETS` in the code), instead of an
    abstract, unitless half-life.
 2. **Ensemble statistics and cumulative energy** — the ensemble simulation
    now reports the standard deviation of N(t) alongside the mean, plotted
@@ -130,11 +131,6 @@ python monte_carlo_decay_v2.py --isotope none --half-life 12 --time-unit hours -
 - Port the core event loop to a compiled backend (Numba/C++) to scale to
   realistic nuclide inventories, as used in production Monte Carlo burnup
   codes.
-  <!--
-  Paste this section near the top of the repository's main README.md,
-  above or in place of the current single-project description. Written
-  to be read by a PhD admissions committee in under a minute.
--->
 
 ## From radioactive decay to nuclear transport, criticality, and structure
 
